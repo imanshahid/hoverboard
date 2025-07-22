@@ -2,7 +2,7 @@
 
 import cv2
 import numpy as np
-from utils.hand_tracking import HandTracker
+from utils.handtracking import HandTracker
 
 cap = cv2.VideoCapture(0)
 hand_tracker = HandTracker()
@@ -22,16 +22,25 @@ while True:
         if prev_x == 0 and prev_y == 0:
             prev_x, prev_y = x, y
 
-        cv2.line(canvas, (prev_x, prev_y), (x, y), (0, 0, 0), 5)
+        cv2.line(canvas, (prev_x, prev_y), (x, y), (0, 0, 0), 1)
         prev_x, prev_y = x, y
     else:
         prev_x, prev_y = 0, 0  # Reset when finger not visible
 
-    output = cv2.addWeighted(frame, 0.5, canvas, 0.5, 0)
+    output = cv2.addWeighted(frame, 1, canvas, 0, 0)
     cv2.imshow("MindSketch", output)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key = cv2.waitKey(1)
+
+# Try checking window state safely
+    try:
+        if key == ord('q') or cv2.getWindowProperty("MindSketch", cv2.WND_PROP_AUTOSIZE) < 1:
+            break
+    except cv2.error:
+    # Window was already closed by user
         break
+
+
 
 cap.release()
 cv2.destroyAllWindows()
