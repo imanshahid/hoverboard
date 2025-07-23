@@ -23,6 +23,17 @@ while True:
 
     if landmarks:
         _, x, y = landmarks[8]  # Index finger tip
+        # If fingertip in color box row
+        if 10 < y < 60:
+            if 10 < x < 60:
+                brush_color, eraser_mode = COLORS['r'], False
+            elif 80 < x < 130:
+                brush_color, eraser_mode = COLORS['g'], False
+            elif 150 < x < 200:
+                brush_color, eraser_mode = COLORS['b'], False
+            elif 220 < x < 270:
+                brush_color, eraser_mode = COLORS['k'], False
+
         if prev_x == 0 and prev_y == 0:
             prev_x, prev_y = x, y
 
