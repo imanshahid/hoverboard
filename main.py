@@ -1,8 +1,12 @@
-# main.py
-
 import cv2
 import numpy as np
 from utils.handtracking import HandTracker
+def draw_color_boxes(frame):
+    box_colors = [("r", (0,0,255)), ("g", (0,255,0)), ("b", (255,0,0)), ("k", (0,0,0))]
+    for i, (label, color) in enumerate(box_colors):
+        x1, y1, x2, y2 = 10 + i*70, 10, 60 + i*70, 60
+        cv2.rectangle(frame, (x1, y1), (x2, y2), color, -1)
+        cv2.putText(frame, label.upper(), (x1 + 15, y2 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 2)
 
 cap = cv2.VideoCapture(0)
 hand_tracker = HandTracker()
@@ -27,7 +31,9 @@ while True:
     else:
         prev_x, prev_y = 0, 0  # Reset when finger not visible
 
-    output = cv2.addWeighted(frame, 1, canvas, 0, 0)
+    output = cv2.addWeighted(frame, 0.5, canvas, 0.5, 0)
+    draw_color_boxes(output)
+
     cv2.imshow("MindSketch", output)
 
     key = cv2.waitKey(1)
